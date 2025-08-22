@@ -6,9 +6,6 @@ const router = express.Router();
 
 router.post('/signup',registerController);
 router.post('/login',loginController);
-// router.get('/test',requireSignIn,isAdmin, TestController);
-
-// router.post('/forgot-password',forgotPasswordContainer)
 
 router.get("/user-auth",requireSignIn ,(req,res)=>{
     res.status(200).send({ok:true})

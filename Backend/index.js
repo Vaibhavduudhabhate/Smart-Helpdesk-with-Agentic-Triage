@@ -9,6 +9,8 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import authroutes from "./Routes/authRoutes.js"
+import kbRoutes from "./Routes/kbRoutes.js"
+
 // import crypto, { verify } from 'crypto';
 // import bcrypt from 'bcrypt';
 
@@ -33,6 +35,7 @@ var corsOptions = {
 dotenv.config();
 app.use(cors(corsOptions));
 app.use('/api',authroutes );
+app.use("/api/kbarticles",kbRoutes );
 
 async function connectMongoDb(url){
     return mongoose.connect(url)

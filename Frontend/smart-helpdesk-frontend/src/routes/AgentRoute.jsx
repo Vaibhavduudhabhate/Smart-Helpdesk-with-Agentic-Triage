@@ -3,7 +3,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from '../components/Spinner';
 import { useAuth } from '../context/AuthContext.jsx';
-import { AdminDashboard } from '../pages/Dashboards/AdminDashboard.jsx';
 
 const  AgentRoute = () => {
     const [ok, setOk] = useState(false);
@@ -18,13 +17,12 @@ const  AgentRoute = () => {
             }
         );
         console.log("response",res)
-        if(res.data){
+        if(res.data.ok){
             setOk(true);
         }else{
             setOk(false);
         }
         }
-        // console.log(user.token)
         if (user?.token) {
             autoCheck()
         }else{

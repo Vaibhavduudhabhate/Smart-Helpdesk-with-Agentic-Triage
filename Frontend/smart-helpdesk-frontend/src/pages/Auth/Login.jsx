@@ -26,8 +26,10 @@ export default function Login() {
           navigate("/dashboard")
         }else if(res.data.user.role == "Agent"){
           navigate("/agent-dashboard")
+        }else if(res.data.user.role == "User"){
+          navigate("/user-dashboard");
         }else{
-          navigate("/user-dashboard")
+          navigate("/login")
         }
         alert("Login Successfully!");
         setForm({ email: "", password: "" });
