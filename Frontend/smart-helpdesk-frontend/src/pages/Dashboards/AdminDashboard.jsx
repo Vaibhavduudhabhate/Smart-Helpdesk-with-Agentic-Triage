@@ -6,6 +6,7 @@ export const AdminDashboard = () => {
     <>
       <div>AdminDashboard</div>
       <ArticleTable />
+      
     </>
   )
 }

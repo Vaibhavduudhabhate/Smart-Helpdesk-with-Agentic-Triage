@@ -33,12 +33,21 @@ const ArticleTable = () => {
           onChange={(e) => setQuery(e.target.value)}
           className="border px-4 py-2 rounded-md w-1/3"
         />
-        <button
-          onClick={() => alert("Open Create Article Modal")}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
-        >
-          + New Article
-        </button>
+        <div>
+            <button onClick={()=>{
+            logout();
+            setForm({ email: "", password: "" });
+          }
+          } type="submit" className="bg-white text-blue-500 border mt-2 p-2 w-[50%]">
+              Logout
+          </button>
+          <button
+            onClick={() => alert("Open Create Article Modal")}
+            className="bg-blue-500 w-[50%] text-white px-4 py-2 rounded-md"
+          >
+            + New Article
+          </button>
+        </div>
       </div>
 
       <table className="min-w-full border border-gray-200 bg-white shadow rounded-md">

@@ -8,6 +8,7 @@ import AgentDashboard from "./pages/Dashboards/AgentDashboard.jsx";
 import { UserDashboard } from "./pages/Dashboards/UserDashboard.jsx";
 import { Unauthorized } from "./pages/Auth/Unauthorized.jsx";
 import UserRoute from "./routes/UserRoute.jsx";
+import Dummy from "./pages/Dashboards/Dummy.jsx";
 
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
       </Route>
       <Route path="/dashboard" element={<AdminRoute/>} >
         <Route path="" element={<AdminDashboard/>} />
+        <Route path="dashboard/dummy" element={<Dummy/>} />
+
       </Route>
       <Route path="/agent-dashboard" element={<AgentRoute/>} >
         <Route path="" element={<AgentDashboard/>} />

@@ -5,10 +5,12 @@ import Spinner from '../components/Spinner';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const  AdminRoute = () => {
-    const [ok, setOk] = useState(false);
-    const {user} = useAuth();
+    const [ok, setOk] = useState(null);
+    const { user, loading } = useAuth();
 
     useEffect(() => { 
+        console.log("successfully entered")
+        
         const autoCheck = async ()=>{
             const res = await axios.get("http://localhost:3000/api/admin-auth",{
                 headers: {
@@ -16,22 +18,21 @@ const  AdminRoute = () => {
                 },
             }
         );
-        console.log("response",res.data.ok)
-        if(res.data.ok){
-            setOk(true);
-        }else{
-            setOk(false);
+            console.log("response",res.data.ok)
+            if(res.data.ok){
+                setOk(true);
+            }else{
+                setOk(null);
+            }
         }
-        }
-        console.log(user.token)
         if (user?.token) {
-            autoCheck()
+            autoCheck();
         }else{
-            setOk(false);
+            setOk(null);
         }
      }, [user?.token]);
-     if (ok === null) return <Spinner path="" />;
-    return ok ? <Outlet /> 
+     if (loading || ok === null) return <Spinner path="" />;
+    return ok && ok === true ? <Outlet /> 
     :  <Navigate to="/unauthorized" replace />;
 }
 

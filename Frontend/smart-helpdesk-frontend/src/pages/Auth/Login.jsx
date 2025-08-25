@@ -19,7 +19,7 @@ export default function Login() {
         email: form.email,
         password: form.password
       });
-      console.log(res.data.user.role , res.data.token)
+      console.log("ROLE:-",res.data.user.role )
       if (res && res.data.success) {
         login(res.data.user , res.data.token)
         if (res.data.user.role == "Admin") {

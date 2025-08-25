@@ -5,7 +5,7 @@ import Spinner from '../components/Spinner';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const  UserRoute = () => {
-    const [ok, setOk] = useState(false);
+    const [ok, setOk] = useState(null);
     const {user} = useAuth();
 
     useEffect(() => { 
@@ -20,18 +20,18 @@ const  UserRoute = () => {
         if(res.data.ok){
             setOk(true);
         }else{
-            setOk(false);
+            setOk(null);
         }
         }
         if (user?.token) {
             autoCheck()
         }else{
-            setOk(false);
+            setOk(null);
         }
      }, [user?.token]);
-     if (ok === null) return <Spinner path="" />;
-    return ok ? <Outlet /> 
-     :  <Navigate to="/unauthorize" replace />;
+     if (loading || ok === null) return <Spinner path="" />;
+    return ok && ok ? <Outlet /> 
+     :  <Navigate to="/unauthorized" replace />;
 }
 
 export default UserRoute;

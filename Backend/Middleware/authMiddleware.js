@@ -3,13 +3,22 @@ import userModel from '../Model/userModel.js';
 
 export const requireSignIn = (req ,res ,next) =>{
     try {
-        const decode = JWT.verify(req.headers.authorization,process.env.JWT_SECRET);
-        req.user = decode;
-        console.log("decoded")
-        next();
-    } catch (error) {
-        console.log(error)        
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).send({ success: false, message: "No token provided" });
     }
+
+    const token = authHeader.startsWith("Bearer ") 
+      ? authHeader.split(" ")[1] 
+      : authHeader;
+
+    const decode = JWT.verify(token, process.env.JWT_SECRET);
+    req.user = decode;
+    next();
+  } catch (error) {
+    console.log("JWT Error:", error.message);
+    return res.status(401).send({ success: false, message: "Invalid token" });
+  }
 }
 
 export const isAdmin = async (req,res,next)=>{
