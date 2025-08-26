@@ -25,7 +25,7 @@ function App() {
       </Route>
       <Route path="/dashboard" element={<AdminRoute/>} >
         <Route path="" element={<AdminDashboard/>} />
-        <Route path="dashboard/dummy" element={<Dummy/>} />
+        <Route path="dummy" element={<Dummy/>} />
 
       </Route>
       <Route path="/agent-dashboard" element={<AgentRoute/>} >

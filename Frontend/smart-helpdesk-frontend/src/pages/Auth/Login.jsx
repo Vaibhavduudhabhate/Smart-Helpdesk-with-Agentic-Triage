@@ -64,13 +64,13 @@ export default function Login() {
           Login
         </button>
       </form>
-      <button onClick={()=>{
+      {/* <button onClick={()=>{
         logout();
         setForm({ email: "", password: "" });
       }
       } type="submit" className="bg-white text-blue-500 border mt-2 p-2 w-full">
           Logout
-      </button>
+      </button> */}
     </div>
   );
 }

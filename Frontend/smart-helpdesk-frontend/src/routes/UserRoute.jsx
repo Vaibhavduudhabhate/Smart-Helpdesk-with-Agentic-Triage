@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 const  UserRoute = () => {
     const [ok, setOk] = useState(null);
-    const {user} = useAuth();
+    const {user , loading} = useAuth();
 
     useEffect(() => { 
         const autoCheck = async ()=>{
@@ -16,7 +16,6 @@ const  UserRoute = () => {
                 },
             }
         );
-        console.log("response",res)
         if(res.data.ok){
             setOk(true);
         }else{
@@ -30,7 +29,7 @@ const  UserRoute = () => {
         }
      }, [user?.token]);
      if (loading || ok === null) return <Spinner path="" />;
-    return ok && ok ? <Outlet /> 
+    return ok && ok === true ? <Outlet /> 
      :  <Navigate to="/unauthorized" replace />;
 }
 
