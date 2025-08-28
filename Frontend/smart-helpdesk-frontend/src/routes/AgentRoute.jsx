@@ -29,7 +29,7 @@ const  AgentRoute = () => {
             setOk(null);
         }
      }, [user?.token]);
-     if (loading ||ok === null) return <Spinner path="" />;
+     if (loading) return <Spinner path="" />;
     return ok && ok === true ? <Outlet /> 
      :  <Navigate to="/unauthorized" replace />;
 }

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import close from '../assets/close.png'
 
 const ArticleTable = () => {
   const [articles, setArticles] = useState([]);
@@ -17,7 +18,7 @@ const ArticleTable = () => {
     body: Yup.string().required("Body is required"),
     tags: Yup.string().required("At least one tag is required"),
     status: Yup.string()
-      .oneOf(["draft", "published"], "Invalid status")
+      .oneOf(["draft", "published","unpublished"], "Invalid status")
       .required("Status is required"),
   });
 
@@ -65,20 +66,26 @@ const ArticleTable = () => {
         if (JSON.stringify(newTags) !== JSON.stringify(editingArticle.tags)) {
           payload.tags = newTags;
         }
+        console.log("payload",payload)
+        if (Object.keys(payload).length === 0){
+          alert("No Change Detected")
+        }else{
+          await axios.put(
+            `http://localhost:3000/api/kbarticles/${editingArticle._id}`,
+            payload
+          );
+          setModalOpen(false);
 
-        await axios.put(
-          `http://localhost:3000/api/kbarticles/${editingArticle._id}`,
-          payload
-        );
+        }
       } else {
         // Create: full payload
         await axios.post("http://localhost:3000/api/kbarticles", {
           ...values,
           tags: values.tags.split(",").map((t) => t.trim()),
         });
+        setModalOpen(false);
       }
 
-      setModalOpen(false);
       fetchArticles();
     } catch (err) {
       console.error(err);
@@ -168,9 +175,12 @@ const ArticleTable = () => {
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg bg-white/30" >
           <div className="bg-white rounded-lg p-6 w-1/2 shadow-lg">
-            <h2 className="text-xl font-bold mb-4">
-              {editingArticle ? "Edit Article" : "New Article"}
-            </h2>
+            <div className="flex justify-between">
+              <h2 className="text-xl font-bold mb-4">
+                {editingArticle ? "Edit Article" : "New Article"}
+              </h2>
+              <img onClick={() => setModalOpen(false)} className="w-[20px] h-[20px]" src={close} alt="closeIcon" />
+            </div>  
 
             <Formik
               initialValues={{
