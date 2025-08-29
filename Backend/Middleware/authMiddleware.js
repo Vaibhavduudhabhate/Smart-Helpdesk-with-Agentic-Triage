@@ -45,7 +45,7 @@ export const authMiddleware = (req, res, next) => {
   }
 };
 
-
+// 
 export const isAdmin = async (req,res,next)=>{
     try {
         const user =await userModel.findById(req.user._id)
