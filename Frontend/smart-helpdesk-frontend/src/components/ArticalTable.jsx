@@ -239,7 +239,6 @@ const ArticleTable = () => {
                     />
                   </div>
 
-                  {/* Status */}
                   <div>
                     <Field
                       as="select"

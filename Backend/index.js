@@ -10,6 +10,8 @@ import fs from "fs";
 import path from "path";
 import authroutes from "./Routes/authRoutes.js"
 import kbRoutes from "./Routes/kbRoutes.js"
+import ticketRoutes from "./Routes/ticketRoutes.js"
+
 
 // import crypto, { verify } from 'crypto';
 // import bcrypt from 'bcrypt';
@@ -36,6 +38,8 @@ dotenv.config();
 app.use(cors(corsOptions));
 app.use('/api',authroutes );
 app.use("/api/kbarticles",kbRoutes );
+app.use("/api/tickets",ticketRoutes );
+
 
 async function connectMongoDb(url){
     return mongoose.connect(url)

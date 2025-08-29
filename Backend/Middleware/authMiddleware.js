@@ -21,6 +21,31 @@ export const requireSignIn = (req ,res ,next) =>{
   }
 }
 
+
+export const authMiddleware = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    // console.log("authHeader",authHeader)
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1]; // get token after 'Bearer '
+    const decoded = JWT.verify(token, process.env.JWT_SECRET);
+
+    // Attach user info from token to request
+    req.user = {
+      id: decoded._id,   // assuming you signed the token with {_id: user._id}
+      email: decoded.email, // optional
+    };
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+};
+
+
 export const isAdmin = async (req,res,next)=>{
     try {
         const user =await userModel.findById(req.user._id)

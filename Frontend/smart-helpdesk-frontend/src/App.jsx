@@ -18,10 +18,13 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+
+        
     
       {/* Dashboards */}
       <Route path="/user-dashboard" element={<UserRoute />} >
         <Route path="" element={<UserDashboard/>} />
+        {/* <Route path="/" element= {} */}
       </Route>
       <Route path="/dashboard" element={<AdminRoute/>} >
         <Route path="" element={<AdminDashboard/>} />
