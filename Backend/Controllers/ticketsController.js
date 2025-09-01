@@ -23,26 +23,38 @@ export const createTickets = async (req, res) => {
 // GET /api/tickets → list tickets (user sees own, admin sees all)
 export const listTickets = async (req, res) => {
   try {
-    console.log(req.user)
-    let filter = {};
-    if (!req.user.isAdmin) filter.userId = req.user.id;
-    if (req.query.status) filter.status = req.query.status;
+    console.log("req.user", req.user._id.toString());
 
-    const tickets = await tickets.find(filter).populate("userId", "email");
-    res.json(tickets);
+    let filter = {};
+    if (req.user.role !== 'Admin') {
+      filter.userId = req.user._id; // Mongoose handles ObjectId
+    }
+
+    // Optional: add status filter
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    console.log("Filter", filter);
+
+    const ticketsaaa = await tickets.find(filter).populate("userId", "email");
+    res.json(ticketsaaa);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+
 // GET /api/tickets/:id
 export const listTicketListbyid = async (req, res) => {
+  // console.log(req.params.id)
   try {
-    const ticket = await Ticket.findById(req.params.id).populate("userId", "email");
+    const ticket = await tickets.findById(req.params.id).populate("userId", "email");
     if (!ticket) return res.status(404).json({ error: "Not found" });
-    if (!req.user.isAdmin && ticket.userId._id.toString() !== req.user.id) {
-      return res.status(403).json({ error: "Forbidden" });
-    }
+    console.log(ticket.userId._id.toString(),req.params.id.toString())
+    // if (ticket.userId._id.toString() !== req.params.id.toString()) {
+    //   return res.status(403).json({ error: "Forbidden" });
+    // }
     res.json(ticket);
   } catch (err) {
     res.status(500).json({ error: err.message });

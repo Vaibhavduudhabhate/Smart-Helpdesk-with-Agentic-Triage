@@ -7,7 +7,8 @@ export default function TicketList() {
   const {user } = useAuth()
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/tickets", {
+    console.log(user)
+    axios.get(`http://localhost:3000/api/tickets`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTickets(res.data));
   }, []);
@@ -20,7 +21,7 @@ export default function TicketList() {
           <li key={t._id} className="border p-3 rounded">
             <p className="font-semibold">{t.subject}</p>
             <p>Status: {t.status}</p>
-            <a href={`/tickets/${t._id}`} className="text-blue-600">View</a>
+            <a href={`user-dashboard/tickets/${t._id}`} className="text-blue-600">View </a>
           </li>
         ))}
       </ul>
