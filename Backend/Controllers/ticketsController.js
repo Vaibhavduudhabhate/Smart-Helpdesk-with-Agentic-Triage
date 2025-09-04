@@ -26,7 +26,7 @@ export const listTickets = async (req, res) => {
     console.log("req.user", req.user._id.toString());
 
     let filter = {};
-    if (req.user.role !== 'Admin') {
+    if (req.user.role !== 'Admin' && req.user.role !== 'Agent') {
       filter.userId = req.user._id; // Mongoose handles ObjectId
     }
 
@@ -47,9 +47,10 @@ export const listTickets = async (req, res) => {
 
 // GET /api/tickets/:id
 export const listTicketListbyid = async (req, res) => {
-  // console.log(req.params.id)
+  console.log(req.params.id)
   try {
     const ticket = await tickets.findById(req.params.id).populate("userId", "email");
+    console.log("ticket",ticket)
     if (!ticket) return res.status(404).json({ error: "Not found" });
     console.log(ticket.userId._id.toString(),req.params.id.toString())
     // if (ticket.userId._id.toString() !== req.params.id.toString()) {
@@ -63,15 +64,17 @@ export const listTicketListbyid = async (req, res) => {
 
 // POST /api/tickets/:id/reply
 export const createReply = async (req, res) => {
+  console.log("entered")
   try {
-    const ticket = await Ticket.findById(req.params.id);
+    console.log(req.params)
+    const ticket = await tickets.findById(req.params.id);
     if (!ticket) return res.status(404).json({ error: "Not found" });
-
+    console.log(req.body.message)
+    console.log("req.user",req.user)
     ticket.replies.push({
       userId: req.user.id,
       message: req.body.message
     });
-
     if (req.user.isAgent || req.user.isAdmin) {
       ticket.status = "in_progress";
     }
@@ -89,7 +92,7 @@ export const assignReply = async (req, res) => {
     if (!req.user.isAdmin && !req.user.isAgent)
       return res.status(403).json({ error: "Forbidden" });
 
-    const ticket = await Ticket.findByIdAndUpdate(
+    const ticket = await tickets.findByIdAndUpdate(
       req.params.id,
       { assignedTo: req.body.agentId, status: "in_progress" },
       { new: true }

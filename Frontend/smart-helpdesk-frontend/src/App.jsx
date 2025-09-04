@@ -10,6 +10,7 @@ import { Unauthorized } from "./pages/Auth/Unauthorized.jsx";
 import UserRoute from "./routes/UserRoute.jsx";
 import Dummy from "./pages/Dashboards/Dummy.jsx";
 import TicketDetails from "./components/TicketDetails.jsx";
+import TicketDetail from "./components/TicketDetailAgent.jsx";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       </Route>
       <Route path="/agent-dashboard" element={<AgentRoute/>} >
         <Route path="" element={<AgentDashboard/>} />
+        <Route path="tickets/:id" element={<TicketDetail />} />
       </Route>
       {/* Dashboards */}
       <Route path="*" element={<Navigate to="/login" replace />} />
