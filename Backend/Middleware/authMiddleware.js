@@ -22,7 +22,7 @@ export const requireSignIn = (req ,res ,next) =>{
 }
 // 
 
-export const authMiddleware = (req, res, next) => {
+export const authMiddleware = async(req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -31,12 +31,13 @@ export const authMiddleware = (req, res, next) => {
 
     const token = authHeader.split(" ")[1]; 
     const decoded = JWT.verify(token, process.env.JWT_SECRET);
-
-    req.user = {
-      id: decoded._id,  
-      email: decoded.email,
-    };
-
+    console.log(decoded)
+    const user = await userModel.findById(decoded._id).select("-password"); 
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    // console.log(req.user)
+    req.user = user;
     next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid token" });

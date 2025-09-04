@@ -39,6 +39,9 @@ app.use(cors(corsOptions));
 app.use('/api',authroutes );
 app.use("/api/kbarticles",kbRoutes );
 app.use("/api/tickets",ticketRoutes );
+app.use("/user-dashboard/api/tickets",ticketRoutes );
+
+
 
 
 async function connectMongoDb(url){

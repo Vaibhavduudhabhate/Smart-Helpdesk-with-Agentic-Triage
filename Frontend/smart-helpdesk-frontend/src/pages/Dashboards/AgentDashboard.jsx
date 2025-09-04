@@ -1,9 +1,20 @@
-import React from 'react'
+// pages/Dashboard.jsx
+import { useState } from "react";
+import TicketList from "../../components/TicketListAgent.jsx";
+import TicketDetail from "../../components/TicketDetailAgent.jsx";
 
-const AgentDashboard = () => {
+
+export default function Dashboard() {
+  const [selectedTicket, setSelectedTicket] = useState(null);
+
   return (
-    <div>AgentDashboard</div>
-  )
+    <div className="flex">
+      {/* <Sidebar onNavigate={() => {}} /> */}
+      {!selectedTicket ? (
+        <TicketList onSelect={setSelectedTicket} />
+      ) : (
+        <TicketDetail ticketId={selectedTicket} onBack={() => setSelectedTicket(null)} />
+      )}
+    </div>
+  );
 }
-
-export default AgentDashboard

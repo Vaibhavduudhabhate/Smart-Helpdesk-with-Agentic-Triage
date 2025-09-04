@@ -9,6 +9,8 @@ import { UserDashboard } from "./pages/Dashboards/UserDashboard.jsx";
 import { Unauthorized } from "./pages/Auth/Unauthorized.jsx";
 import UserRoute from "./routes/UserRoute.jsx";
 import Dummy from "./pages/Dashboards/Dummy.jsx";
+import TicketDetails from "./components/TicketDetails.jsx";
+import TicketDetail from "./components/TicketDetailAgent.jsx";
 
 
 function App() {
@@ -23,8 +25,8 @@ function App() {
     
       {/* Dashboards */}
       <Route path="/user-dashboard" element={<UserRoute />} >
-        <Route path="" element={<UserDashboard/>} />
-        {/* <Route path="/" element= {} */}
+        <Route index element={<UserDashboard />} /> 
+        <Route path="tickets/:id" element={<TicketDetails />} /> 
       </Route>
       <Route path="/dashboard" element={<AdminRoute/>} >
         <Route path="" element={<AdminDashboard/>} />
@@ -33,6 +35,7 @@ function App() {
       </Route>
       <Route path="/agent-dashboard" element={<AgentRoute/>} >
         <Route path="" element={<AgentDashboard/>} />
+        <Route path="tickets/:id" element={<TicketDetail />} />
       </Route>
       {/* Dashboards */}
       <Route path="*" element={<Navigate to="/login" replace />} />

@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/',authMiddleware,listTickets);
 router.post("/",authMiddleware,createTickets);
 router.get('/:id',listTicketListbyid);
-router.post("/:id/reply",createReply);
+router.post("/:id/reply",authMiddleware,createReply);
 router.post("/:id/assign",assignReply)
 
 
