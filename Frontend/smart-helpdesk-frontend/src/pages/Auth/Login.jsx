@@ -3,6 +3,7 @@ import { loginUser } from "../../api/api";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../config";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -15,7 +16,7 @@ export default function Login() {
     e.preventDefault();
     console.log(form)
     try {
-      const res = await axios.post(`http://localhost:3000/api/login`,{
+      const res = await axios.post(`${API_URL}/login`,{
         email: form.email,
         password: form.password
       });

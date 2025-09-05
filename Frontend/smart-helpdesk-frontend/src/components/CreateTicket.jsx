@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 export default function NewTicket() {
   const [subject, setSubject] = useState("");
@@ -10,7 +11,7 @@ export default function NewTicket() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/tickets", { subject, body }, {
+      await axios.post(`${API_URL}/tickets`, { subject, body }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       alert("Ticket created!");

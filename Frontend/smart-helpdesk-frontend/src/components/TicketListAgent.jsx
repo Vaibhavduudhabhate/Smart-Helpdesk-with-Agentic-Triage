@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config.js";
+
 
 export default function TicketList({ onSelect }) {
   const [tickets, setTickets] = useState([]);
-  const {user } = useAuth()
-    const navigate = useNavigate();
+  const { user } = useAuth()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user)
-    axios.get(`http://localhost:3000/api/tickets`, {
+    axios.get(`${API_URL}/tickets`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTickets(res.data));
   }, []);

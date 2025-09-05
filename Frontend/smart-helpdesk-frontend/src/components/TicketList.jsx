@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
@@ -8,7 +9,7 @@ export default function TicketList() {
 
   useEffect(() => {
     console.log(user)
-    axios.get(`http://localhost:3000/api/tickets`, {
+    axios.get(`${API_URL}/tickets`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTickets(res.data));
   }, []);

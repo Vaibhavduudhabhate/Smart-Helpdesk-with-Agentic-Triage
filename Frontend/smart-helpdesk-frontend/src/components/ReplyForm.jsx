@@ -2,6 +2,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 export default function ReplyForm({ ticketId }) {
     const { user } = useAuth();
@@ -10,19 +11,25 @@ export default function ReplyForm({ ticketId }) {
         message: Yup.string().required("Reply cannot be empty"),
   });
 
-  const handleSubmit = (values, { resetForm }) => {
-    fetch(`http://localhost:3000/api/tickets/${ticketId}/reply`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify(values),
-    }).then(() => {
-      resetForm();
-    //   window.location.reload();
-    });
-  };
+const handleSubmit = async (values, { resetForm }) => {
+  try {
+    await axios.post(
+      `${API_URL}/tickets/${ticketId}/reply`,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+
+    resetForm();
+    // onReplySuccess();
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    alert("Failed to send reply. Please try again.");
+  }
+};
 
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>

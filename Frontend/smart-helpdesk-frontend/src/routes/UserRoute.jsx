@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from '../components/Spinner';
 import { useAuth } from '../context/AuthContext.jsx';
+import { API_URL } from '../config.js';
 
 const  UserRoute = () => {
     const [ok, setOk] = useState(null);
@@ -10,7 +11,7 @@ const  UserRoute = () => {
 
     useEffect(() => { 
         const autoCheck = async ()=>{
-            const res = await axios.get("http://localhost:3000/api/user-auth",{
+            const res = await axios.get(`${API_URL}/user-auth`,{
                 headers: {
                     Authorization: user.token
                 },

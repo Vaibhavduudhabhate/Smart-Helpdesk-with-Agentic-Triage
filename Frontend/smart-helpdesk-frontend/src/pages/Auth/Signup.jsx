@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 // import "../../styles/AuthStyles.css";
 
 
@@ -16,7 +17,7 @@ const Signup = () => {
     e.preventDefault();
     console.log(name,email,password)
     try {
-      const res = await axios.post(`http://localhost:3000/api/signup`,{name ,password,email,role:"User"});
+      const res = await axios.post(`${API_URL}/signup`,{name ,password,email,role:"User"});
       console.log(res)
       if (res && res.data.success) {
         navigate("/login")

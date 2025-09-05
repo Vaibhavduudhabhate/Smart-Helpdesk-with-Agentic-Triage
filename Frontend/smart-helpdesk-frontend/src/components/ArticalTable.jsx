@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import close from '../assets/close.png'
+import { API_URL } from "../config";
 
 const ArticleTable = () => {
   const [articles, setArticles] = useState([]);
@@ -24,7 +25,7 @@ const ArticleTable = () => {
 
   // ✅ Fetch Articles
   const fetchArticles = async () => {
-    const res = await axios.get(`http://localhost:3000/api/kbarticles?query=${query}`);
+    const res = await axios.get(`${API_URL}/kbarticles?query=${query}`);
     setArticles(res.data);
   };
 
@@ -35,7 +36,7 @@ const ArticleTable = () => {
   // ✅ Delete Article
   const handleDelete = async (id) => {
     if (window.confirm("Delete this article?")) {
-      await axios.delete(`http://localhost:3000/api/kbarticles/${id}`);
+      await axios.delete(`${API_URL}/kbarticles/${id}`);
       fetchArticles();
     }
   };
@@ -71,7 +72,7 @@ const ArticleTable = () => {
           alert("No Change Detected")
         }else{
           await axios.put(
-            `http://localhost:3000/api/kbarticles/${editingArticle._id}`,
+            `${API_URL}/kbarticles/${editingArticle._id}`,
             payload
           );
           setModalOpen(false);
@@ -79,7 +80,7 @@ const ArticleTable = () => {
         }
       } else {
         // Create: full payload
-        await axios.post("http://localhost:3000/api/kbarticles", {
+        await axios.post(`${API_URL}/kbarticles`, {
           ...values,
           tags: values.tags.split(",").map((t) => t.trim()),
         });

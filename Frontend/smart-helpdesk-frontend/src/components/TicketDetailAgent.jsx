@@ -4,6 +4,7 @@ import ReplyForm from "./ReplyForm.jsx";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../config.js";
 
 export default function TicketDetail({ onBack }) {
   const { id } = useParams(); 
@@ -12,7 +13,7 @@ export default function TicketDetail({ onBack }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/tickets/${id}`, {
+    axios.get(`${API_URL}/tickets/${id}`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTicket(res.data));
   }, [id, user.token]);

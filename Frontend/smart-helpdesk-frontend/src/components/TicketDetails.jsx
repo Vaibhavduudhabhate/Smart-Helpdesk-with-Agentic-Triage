@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // If you're using react-router-dom
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 export default function TicketDetails() {
   const { id } = useParams(); 
@@ -10,7 +11,7 @@ export default function TicketDetails() {
 
   useEffect(() => {
     console.log(user)
-    axios.get(`http://localhost:3000/api/tickets/${id}`, {
+    axios.get(`${API_URL}/tickets/${id}`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTicket(res.data));
   }, [id, user.token]);
