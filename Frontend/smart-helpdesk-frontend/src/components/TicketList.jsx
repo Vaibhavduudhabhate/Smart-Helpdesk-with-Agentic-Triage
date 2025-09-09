@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../config";
 
-export default function TicketList() {
+export default function TicketList({ refresh }) {
   const [tickets, setTickets] = useState([]);
   const {user } = useAuth()
 
@@ -12,7 +12,7 @@ export default function TicketList() {
     axios.get(`${API_URL}/tickets`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTickets(res.data));
-  }, []);
+  }, [refresh , user.token]);
 
   return (
     <div className="p-4">

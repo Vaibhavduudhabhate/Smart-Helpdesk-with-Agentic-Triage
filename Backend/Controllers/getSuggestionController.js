@@ -1,5 +1,5 @@
 import Ticket from "../Model/tickets.js";
-import kbArticle from "../Model/kbArticle.js";
+import kbArticle from "../Model/kbarticalModel.js";
 import { v4 as uuidv4 } from "uuid";
 
 // GET /api/agent/suggestion/:ticketId

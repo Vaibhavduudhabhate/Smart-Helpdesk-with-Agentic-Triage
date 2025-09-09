@@ -1,14 +1,17 @@
-import React from 'react'
-import NewTicket from '../../components/CreateTicket'
-import TicketList from '../../components/TicketList'
-import TicketDetail from '../../components/TicketDetailReply'
+import React, { useState } from 'react'
+import NewTicket from '../../components/CreateTicket.jsx'
+import TicketList from '../../components/TicketList.jsx'
 
 export const UserDashboard = () => {
+  const [refresh, setRefresh] = useState(false);
+
+  const handleTicketCreated = () => {
+    setRefresh(prev => !prev);
+  };
   return (
     <div>
-      <NewTicket />
-      <TicketList />
-      <TicketDetail />
+      <NewTicket onTicketCreated={handleTicketCreated}/>
+      <TicketList refresh={refresh} />
     </div>
   )
 }

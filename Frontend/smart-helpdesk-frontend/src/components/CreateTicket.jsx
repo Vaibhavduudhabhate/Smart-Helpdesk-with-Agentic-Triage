@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../config";
 
-export default function NewTicket() {
+export default function NewTicket({ onTicketCreated }) {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const {user ,loading} = useAuth();
@@ -14,9 +14,9 @@ export default function NewTicket() {
       await axios.post(`${API_URL}/tickets`, { subject, body }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
-      alert("Ticket created!");
       setSubject("");
       setBody("");
+      if (onTicketCreated) onTicketCreated();
     } catch (err) {
       alert(err.response?.data?.error || "Error");
     }
