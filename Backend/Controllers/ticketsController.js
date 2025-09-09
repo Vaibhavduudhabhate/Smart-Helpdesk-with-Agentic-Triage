@@ -104,4 +104,28 @@ export const assignReply = async (req, res) => {
   }
 };
 
+export const updateTicketStatus = async (req, res) => {
+  try {
+    console.log("req",req)
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const ticket = await tickets.findById(id);
+    if (!ticket) {
+      return res.status(404).json({ error: "Ticket not found" });
+    }
+
+    if (!["Agent"].includes(req.user.role)) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    ticket.status = status;
+    await ticket.save();
+
+    res.json({ message: "Status updated", ticket });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
