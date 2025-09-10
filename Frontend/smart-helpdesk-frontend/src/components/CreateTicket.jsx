@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../config";
+import { toast } from "react-toastify";
 
 export default function NewTicket({ onTicketCreated }) {
   const [subject, setSubject] = useState("");
@@ -26,9 +27,9 @@ export default function NewTicket({ onTicketCreated }) {
       setSubject("");
       setBody("");
       if (onTicketCreated) onTicketCreated();
-      alert("✅ Ticket created successfully!");
+      toast.success("✅ Ticket created successfully!");
     } catch (err) {
-      alert(err.response?.data?.error || "Error creating ticket");
+      toast.error(err.response?.data?.error || "Error creating ticket");
     } finally {
       setLoading(false);
     }

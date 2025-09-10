@@ -9,6 +9,16 @@ export const kbListController = async (req, res) => {
   }
 }
 
+export const kbByids = async (req, res) => {
+  try {
+    const ids = req.query.ids.split(",");
+    const articles = await kbarticalModel.find({ _id: { $in: ids } });
+    res.json(articles);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export const kbsearchController = async(req ,res) =>{
     try {
     const query = req.query.query || "";

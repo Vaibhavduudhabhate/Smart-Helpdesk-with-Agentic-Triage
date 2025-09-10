@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Suggestion from "./suggestions";
 
 export default function TicketDetails() {
   const { id } = useParams();
@@ -99,12 +100,7 @@ export default function TicketDetails() {
             {"\n"}
             {suggestion.draftReply}
           </p>
-          {suggestion.citations?.length > 0 && (
-            <p className="mt-3">
-              <strong>Related KB Articles:</strong>{" "}
-              {suggestion.citations.join(", ")}
-            </p>
-          )}
+          {/* <Suggestion suggestion={suggestion.citations} /> */}
         </div>
       )}
     </div>

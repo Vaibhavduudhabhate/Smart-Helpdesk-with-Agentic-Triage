@@ -34,7 +34,7 @@ export const getSuggestion = async (req, res) => {
     // 3. Draft reply
     let draftReply = `Hi, based on your "${category}" issue, here are possible solutions:\n`;
     kbMatches.forEach((kb, i) => {
-      draftReply += `${i + 1}. ${kb.title}\n`;
+      draftReply += `${i + 1}. ${kb.title}\n ${kb.body}`;
     });
 
     // 4. Build response

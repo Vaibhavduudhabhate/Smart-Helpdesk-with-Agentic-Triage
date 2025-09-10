@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -32,14 +33,14 @@ export default function Login() {
         }else{
           navigate("/login")
         }
-        alert("Login Successfully!");
+        toast.success("Login Successfully!");
         setForm({ email: "", password: "" });
       }else{
-        alert("Login failed!");
+        toast.error("Login failed!");
       }
     } catch (error) {
       console.log(error)
-      // toast.error("Something went wrong")
+      toast.error("Something went wrong")
     }
   }
 
