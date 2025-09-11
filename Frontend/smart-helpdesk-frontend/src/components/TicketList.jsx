@@ -9,15 +9,17 @@ export default function TicketList({ refresh }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${API_URL}/tickets`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-      .then((res) => setTickets(res.data))
-      .finally(() => setLoading(false));
-  }, [refresh, user.token]);
+    useEffect(() => {
+      if (!user || !user.token) return;
+
+      setLoading(true);
+      axios
+        .get(`${API_URL}/tickets`, {
+          headers: { Authorization: `Bearer ${user?.token}` },
+        })
+        .then((res) => setTickets(res.data))
+        .finally(() => setLoading(false));
+    }, [refresh, user?.token]);
 
   return (
     <div className="max-w-3xl mx-auto p-4">

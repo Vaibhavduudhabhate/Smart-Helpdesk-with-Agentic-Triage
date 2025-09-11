@@ -9,7 +9,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex">
-      {/* <Sidebar onNavigate={() => {}} /> */}
+      
       {!selectedTicket ? (
         <TicketList onSelect={setSelectedTicket} />
       ) : (
