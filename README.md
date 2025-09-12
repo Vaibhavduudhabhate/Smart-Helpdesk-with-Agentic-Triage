@@ -36,12 +36,17 @@ Here are some visual walk-throughs of your system:
 | Description | Screenshot |
 |-------------|------------|
 | **Signup Page** | ![Signup](./screenshots/Signup.png) |
-| **Login Page** | ![Login](./screenshots/login.png) |
-| **User Dashboard / Create Ticket** | ![Create Ticket](./screenshots/create-ticket.png) |
-| **User Dashboard / View Tickets** | ![User Dashboard](./screenshots/user-dashboard.png) |
-| **Agent Dashboard / Ticket List** | ![Agent Dashboard](./screenshots/agent-dashboard.png) |
-| **Reply to Ticket** | ![Reply](./screenshots/reply.png) |
-| **Redirect Spinner** | ![Spinner](./screenshots/spinner.gif) |
+| **Login Page** | ![Login](./screenshots/Login.png) |
+| **User Dashboard / Create Ticket** | ![Create Ticket](./screenshots/userdashboard-1.png) |
+| **User Dashboard / View Tickets** | ![User Dashboard](./screenshots/userdashboard-2.png) |
+| **User Dashboard / Tickets Detail** | ![User Dashboard](./screenshots/userdashboard-ticket-details.png) |
+| **Admin Dashboard / Ticket List** | ![Admin Dashboard](./screenshots/Admin-Dashboard.png) |
+| **Admin Dashboard / Ticket Details** | ![Admin Dashboard](./screenshots/Admin-dashboard-ticket-details.png) |
+| **Admin Dashboard / Search List** | ![Admin Dashboard](./screenshots/Admin-dashboard-search.png) |
+| **Admin Dashboard / Edit ticket List** | ![Admin Dashboard](./screenshots/Admin-edit-ticket.png) |
+| **Admin Dashboard / create ticket List** | ![Admin Dashboard](./screenshots/Admin-new-ticket.png) |
+| **Agent Dashboard / Ticket List** | ![Agent Dashboard](./screenshots/Agent-Dashboard.png) |
+| **Redirect Spinner** | ![Spinner](./screenshots/Loader.png) |
 
 ---
 
