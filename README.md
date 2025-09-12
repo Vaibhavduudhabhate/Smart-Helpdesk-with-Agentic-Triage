@@ -35,7 +35,7 @@ Here are some visual walk-throughs of your system:
 
 | Description | Screenshot |
 |-------------|------------|
-| **Signup Page** | ![Signup](./screenshots/signup.png) |
+| **Signup Page** | ![Signup](./screenshots/Signup.png) |
 | **Login Page** | ![Login](./screenshots/login.png) |
 | **User Dashboard / Create Ticket** | ![Create Ticket](./screenshots/create-ticket.png) |
 | **User Dashboard / View Tickets** | ![User Dashboard](./screenshots/user-dashboard.png) |
