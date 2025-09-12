@@ -30,7 +30,7 @@ export default function TicketList({ refresh }) {
       ) : tickets.length === 0 ? (
         <p className="text-gray-500">No tickets found. Create one above 👆</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {tickets.map((t) => (
             <li
               key={t._id}
@@ -64,6 +64,7 @@ export default function TicketList({ refresh }) {
             </li>
           ))}
         </ul>
+
       )}
     </div>
   );
