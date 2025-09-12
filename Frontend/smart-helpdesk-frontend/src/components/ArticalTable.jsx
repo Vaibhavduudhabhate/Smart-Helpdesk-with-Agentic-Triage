@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import close from '../assets/close.png'
+import close from "../assets/close.png";
+import { API_URL } from "../config";
 
-const ArticleTable = () => {
+const ArticleTable = ({ onLogout }) => {
   const [articles, setArticles] = useState([]);
   const [query, setQuery] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState(null); // null = create, object = edit
-  const { logout } = useAuth();
+  const [editingArticle, setEditingArticle] = useState(null);
 
   // ✅ Validation schema
   const ArticleSchema = Yup.object().shape({
@@ -18,13 +17,13 @@ const ArticleTable = () => {
     body: Yup.string().required("Body is required"),
     tags: Yup.string().required("At least one tag is required"),
     status: Yup.string()
-      .oneOf(["draft", "published","unpublished"], "Invalid status")
+      .oneOf(["draft", "published", "unpublished"], "Invalid status")
       .required("Status is required"),
   });
 
   // ✅ Fetch Articles
   const fetchArticles = async () => {
-    const res = await axios.get(`http://localhost:3000/api/kbarticles?query=${query}`);
+    const res = await axios.get(`${API_URL}/kbarticles?query=${query}`);
     setArticles(res.data);
   };
 
@@ -35,28 +34,25 @@ const ArticleTable = () => {
   // ✅ Delete Article
   const handleDelete = async (id) => {
     if (window.confirm("Delete this article?")) {
-      await axios.delete(`http://localhost:3000/api/kbarticles/${id}`);
+      await axios.delete(`${API_URL}/kbarticles/${id}`);
       fetchArticles();
     }
   };
 
-  // ✅ Open modal for new article
+  // ✅ Modal openers
   const handleNew = () => {
     setEditingArticle(null);
     setModalOpen(true);
   };
-
-  // ✅ Open modal for edit
   const handleEdit = (article) => {
     setEditingArticle(article);
     setModalOpen(true);
   };
 
-  // ✅ Save (create or update)
+  // ✅ Save
   const handleSave = async (values) => {
     try {
       if (editingArticle) {
-        // diff check: send only changed fields
         let payload = {};
         if (values.title !== editingArticle.title) payload.title = values.title;
         if (values.body !== editingArticle.body) payload.body = values.body;
@@ -66,20 +62,15 @@ const ArticleTable = () => {
         if (JSON.stringify(newTags) !== JSON.stringify(editingArticle.tags)) {
           payload.tags = newTags;
         }
-        console.log("payload",payload)
-        if (Object.keys(payload).length === 0){
-          alert("No Change Detected")
-        }else{
-          await axios.put(
-            `http://localhost:3000/api/kbarticles/${editingArticle._id}`,
-            payload
-          );
-          setModalOpen(false);
 
+        if (Object.keys(payload).length === 0) {
+          alert("No Change Detected");
+        } else {
+          await axios.put(`${API_URL}/kbarticles/${editingArticle._id}`, payload);
+          setModalOpen(false);
         }
       } else {
-        // Create: full payload
-        await axios.post("http://localhost:3000/api/kbarticles", {
+        await axios.post(`${API_URL}/kbarticles`, {
           ...values,
           tags: values.tags.split(",").map((t) => t.trim()),
         });
@@ -94,93 +85,142 @@ const ArticleTable = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className=" p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex justify-between mb-4">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
         <input
           type="text"
-          placeholder="Search articles..."
+          placeholder="🔍 Search articles..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="border px-4 py-2 rounded-md w-1/3"
+          className="flex-1 border px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
         />
-        <div className="flex gap-2">
-          <button
-            onClick={logout}
+        <div className="flex gap-2 justify-end">
+          {/* <button
+            onClick={onLogout}
             type="button"
-            className="bg-white text-blue-500 border px-4 py-2 rounded-md"
+            className="bg-white text-blue-500 border px-4 py-2 rounded-lg shadow hover:bg-blue-50 transition"
           >
             Logout
-          </button>
+          </button> */}
           <button
             onClick={handleNew}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
           >
             + New Article
           </button>
         </div>
       </div>
 
-      {/* Table */}
-      <table className="min-w-full border border-gray-200 bg-white shadow rounded-md">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="p-3 border-b">Title</th>
-            <th className="p-3 border-b">Tags</th>
-            <th className="p-3 border-b">Status</th>
-            <th className="p-3 border-b">Updated At</th>
-            <th className="p-3 border-b">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+      {/* Responsive Table / Card */}
+      <div className="overflow-x-auto">
+        <table className="hidden sm:table min-w-full border border-blue-600 bg-white shadow-lg rounded-lg overflow-hidden">
+          <thead className="bg-gradient-to-r from-blue-50 to-blue-300 text-left">
+            <tr>
+              <th className="p-3 border-b">Title</th>
+              <th className="p-3 border-b">Tags</th>
+              <th className="p-3 border-b">Status</th>
+              <th className="p-3 border-b">Updated At</th>
+              <th className="p-3 border-b">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articles.map((a) => (
+              <tr key={a._id} className="hover:bg-gray-50 transition">
+                <td className="p-3 border-b font-medium text-gray-800">{a.title}</td>
+                <td className="p-3 border-b text-gray-600">{a.tags.join(", ")}</td>
+                <td className="p-3 border-b">
+                  <span
+                    className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                      a.status === "published"
+                        ? "bg-green-100 text-green-700"
+                        : a.status === "unpublished"
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-blue-100 text-blue-700"
+                    }`}
+                  >
+                    {a.status}
+                  </span>
+                </td>
+                <td className="p-3 border-b text-gray-500">
+                  {new Date(a.updatedAt).toLocaleString()}
+                </td>
+                <td className="p-3 border-b space-x-2">
+                  <button
+                    onClick={() => handleEdit(a)}
+                    className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-lg text-sm"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(a._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Mobile Cards */}
+        <div className="grid sm:hidden gap-4">
           {articles.map((a) => (
-            <tr key={a._id} className="hover:bg-gray-50">
-              <td className="p-3 border-b">{a.title}</td>
-              <td className="p-3 border-b">{a.tags.join(", ")}</td>
-              <td className="p-3 border-b">
-                <span
-                  className={`px-2 py-1 text-sm rounded ${
-                    a.status === "published"
-                      ? "bg-green-100 text-green-600" :
-                       a.status === "unpublished" ? "bg-orange-100 text-orange-600"
-                      : "bg-blue-100 text-blue-600"
-                  }`}
-                >
-                  {a.status}
-                </span>
-              </td>
-              <td className="p-3 border-b">
-                {new Date(a.updatedAt).toLocaleString()}
-              </td>
-              <td className="p-3 border-b space-x-2">
+            <div
+              key={a._id}
+              className="bg-white shadow-md rounded-lg p-4 flex flex-col gap-2"
+            >
+              <h3 className="text-lg font-semibold text-gray-800">{a.title}</h3>
+              <p className="text-sm text-gray-600">Tags: {a.tags.join(", ")}</p>
+              <span
+                className={`self-start px-2 py-1 text-xs font-semibold rounded-full ${
+                  a.status === "published"
+                    ? "bg-green-100 text-green-700"
+                    : a.status === "unpublished"
+                    ? "bg-orange-100 text-orange-700"
+                    : "bg-blue-100 text-blue-700"
+                }`}
+              >
+                {a.status}
+              </span>
+              <p className="text-xs text-gray-500">
+                Updated: {new Date(a.updatedAt).toLocaleString()}
+              </p>
+              <div className="flex gap-2 mt-2">
                 <button
                   onClick={() => handleEdit(a)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded-md"
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-white py-1 rounded-lg text-sm"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(a._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded-md"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1 rounded-lg text-sm"
                 >
                   Delete
                 </button>
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
 
       {/* Modal with Formik */}
       {modalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg bg-white/30" >
-          <div className="bg-white rounded-lg p-6 w-1/2 shadow-lg">
-            <div className="flex justify-between">
-              <h2 className="text-xl font-bold mb-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-lg shadow-xl animate-fadeIn">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-800">
                 {editingArticle ? "Edit Article" : "New Article"}
               </h2>
-              <img onClick={() => setModalOpen(false)} className="w-[20px] h-[20px]" src={close} alt="closeIcon" />
-            </div>  
+              <img
+                onClick={() => setModalOpen(false)}
+                className="w-6 h-6 cursor-pointer hover:scale-110 transition"
+                src={close}
+                alt="closeIcon"
+              />
+            </div>
 
             <Formik
               initialValues={{
@@ -195,47 +235,44 @@ const ArticleTable = () => {
             >
               {({ isSubmitting }) => (
                 <Form className="space-y-4">
-                  {/* Title */}
                   <div>
                     <Field
                       name="title"
                       placeholder="Title"
-                      className="w-full border px-3 py-2 rounded-md"
+                      className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
                     />
                     <ErrorMessage
                       name="title"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="text-red-500 text-sm mt-1"
                     />
                   </div>
 
-                  {/* Body */}
                   <div>
                     <Field
                       as="textarea"
                       name="body"
                       placeholder="Body"
                       rows="4"
-                      className="w-full border px-3 py-2 rounded-md"
+                      className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
                     />
                     <ErrorMessage
                       name="body"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="text-red-500 text-sm mt-1"
                     />
                   </div>
 
-                  {/* Tags */}
                   <div>
                     <Field
                       name="tags"
                       placeholder="Tags (comma separated)"
-                      className="w-full border px-3 py-2 rounded-md"
+                      className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
                     />
                     <ErrorMessage
                       name="tags"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="text-red-500 text-sm mt-1"
                     />
                   </div>
 
@@ -243,7 +280,7 @@ const ArticleTable = () => {
                     <Field
                       as="select"
                       name="status"
-                      className="w-full border px-3 py-2 rounded-md"
+                      className="w-full border px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
                     >
                       <option value="draft">Draft</option>
                       <option value="published">Published</option>
@@ -252,23 +289,22 @@ const ArticleTable = () => {
                     <ErrorMessage
                       name="status"
                       component="div"
-                      className="text-red-500 text-sm"
+                      className="text-red-500 text-sm mt-1"
                     />
                   </div>
 
-                  {/* Buttons */}
                   <div className="flex justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => setModalOpen(false)}
-                      className="bg-gray-300 px-4 py-2 rounded-md"
+                      className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-lg"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
                     >
                       Save
                     </button>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext.jsx";
+import { API_URL } from "../config.js";
 
 export default function TicketDetail() {
   const { id } = useParams();
@@ -11,14 +12,14 @@ export default function TicketDetail() {
 
   useEffect(() => {
     console.log(user)
-    axios.get(`http://localhost:3000/api/tickets/${id}`, {
+    axios.get(`${API_URL}/tickets/${id}`, {
       headers: { Authorization: `Bearer ${user.token}` }
     }).then(res => setTicket(res.data));
   }, [id]);
 
   const handleReply = async (e) => {
     e.preventDefault();
-    const res = await axios.post(`http://localhost:3000/api/tickets/${id}/reply`, { message: reply }, {
+    const res = await axios.post(`${API_URL}/tickets/${id}/reply`, { message: reply }, {
       headers: { Authorization: `Bearer ${user.token}` }
     });
     setTicket(res.data);
